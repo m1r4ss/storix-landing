@@ -92,6 +92,9 @@ export default function Home() {
     billing === "monthly"
       ? current.monthly
       : Math.round(current.monthly * 0.8);
+  const yearlyTotal =
+    billing === "yearly" ? price * 12 : current.monthly * 12;
+  const businessItemsLabel = `До ${current.volume} товаров`;
 
   return (
     <main className={styles.page}>
@@ -282,11 +285,14 @@ export default function Home() {
               {price.toLocaleString("ru-RU")}{" "}
               <span>₸ / месяц</span>
             </strong>
+            <span className={styles.yearlyNote}>
+              {yearlyTotal.toLocaleString("ru-RU")} ₸ / год
+            </span>
             <p>Оптимально для малого и среднего бизнеса</p>
             <button className={styles.solidWhiteBtn}>Зарегистрироваться</button>
             <ul>
               <li>
-                <img src={imgVector7} alt="" /> До 1 000 товаров
+                <img src={imgVector7} alt="" /> {businessItemsLabel}
               </li>
               <li>
                 <img src={imgVector7} alt="" /> Неограниченно складов
