@@ -1,0 +1,2 @@
+# storix-landing
+Test warehouse
