@@ -16,6 +16,12 @@
   backdrop-filter: blur(41px);
   border-bottom: 0.5px solid #a5a5a5;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(153, 153, 153, 0));
+  transition: transform 220ms ease, opacity 220ms ease;
+}
+
+.navHidden {
+  transform: translateY(-100%);
+  opacity: 0;
 }
 
 .logo {

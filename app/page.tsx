@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./page.module.css";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const imgRectangle3 =
   "https://www.figma.com/api/mcp/asset/e5144d63-facd-4613-abf3-d27d83ac3d8f";
@@ -87,6 +87,7 @@ export default function Home() {
   const [tierIndex, setTierIndex] = useState(2);
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  const [navHidden, setNavHidden] = useState(false);
   const current = tiers[tierIndex];
   const price =
     billing === "monthly"
@@ -94,11 +95,42 @@ export default function Home() {
       : Math.round(current.monthly * 0.8);
   const yearlyTotal =
     billing === "yearly" ? price * 12 : current.monthly * 12;
+
+  useEffect(() => {
+    let lastY = window.scrollY;
+    let ticking = false;
+
+    const update = () => {
+      const currentY = window.scrollY;
+      const delta = currentY - lastY;
+
+      if (currentY < 20) {
+        setNavHidden(false);
+      } else if (delta > 10) {
+        setNavHidden(true);
+      } else if (delta < -6) {
+        setNavHidden(false);
+      }
+
+      lastY = currentY;
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(update);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   const businessItemsLabel = `До ${current.volume} товаров`;
 
   return (
     <main className={styles.page}>
-      <header className={styles.nav}>
+      <header className={`${styles.nav} ${navHidden ? styles.navHidden : ""}`}>
         <div className={styles.logo}>
           <img src={imgGroup8} alt="" className={styles.logoIcon} />
           <img src={imgStorix} alt="Storix" className={styles.logoText} />
